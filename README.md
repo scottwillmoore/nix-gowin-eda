@@ -1,6 +1,38 @@
 # GOWIN EDA
 
-GOWIN EDA packages for Nix.
+## Commands
+
+### `gowin-eda-education-unwrapped`
+
+```sh
+# Enter a temporary directory
+mkdir build/ && cd build/
+
+# Enter the development shell for the package
+nix develop --file ../ gowin-eda-education-unwrapped
+
+# Run the unpack and patch phases
+phases="${prePhases[*]:-} unpackPhase patchPhase" genericBuild
+
+# Run the configure, build and check phases
+phases="${preConfigurePhases[*]:-} configurePhase ${preBuildPhases[*]:-} buildPhase checkPhase" genericBuild
+
+# Run the install and fixup phases
+rm -r outputs/ && phases="${preInstallPhases[*]:-} installPhase ${preFixupPhases[*]:-} fixupPhase" genericBuild | tee build.log
+```
+
+### `gowin-eda-education`
+
+```sh
+# Build and run the FHS environment which contains the package
+nix run --file ./ gowin-eda-education
+
+# Run the binary with LD debug output
+LD_DEBUG=libs /bin/gw_ide
+
+# Run the binary with QT debug output
+QT_DEBUG_PLUGINS=1 /bin/gw_ide
+```
 
 ## References
 
