@@ -1,6 +1,6 @@
 # GOWIN EDA
 
-> This is a work in progress! I haven't got it to work yet!
+> This is a work in progress! I haven't got it to work yet! Please see my [HELPME](./HELPME.md)!
 
 ## Commands
 
