@@ -1,5 +1,7 @@
 # GOWIN EDA
 
+> This is a work in progress! I haven't got it to work yet!
+
 ## Commands
 
 ### `gowin-eda-education-unwrapped`
