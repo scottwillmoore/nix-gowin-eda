@@ -1,28 +1,25 @@
 {
+  lib,
   stdenv,
-
   fetchurl,
 
-  wrapQtAppsHook,
+  version ? "1.9.11.03",
+  hash ? "sha256-b9OS90c7JNhHtvjr3HoYXFkYJro12NDlF5YQMNRG+fc=",
 }:
-let
-  inherit (stdenv) mkDerivation;
-
-  hash = "sha256-I26TSznMquS74NZzgJtRDMQ4V9hg7z4WCSJ0ybkvrQ4=";
-  version = "1.9.11.01";
-in
-mkDerivation {
-  inherit version;
+stdenv.mkDerivation {
   pname = "gowin-eda-education-unwrapped";
+  inherit version;
 
   src = fetchurl {
+    url = "https://eda.gowinsemi.cn/Gowin_V${version}_Education_Linux.tar.gz";
     inherit hash;
-    url = "https://cdn.gowinsemi.com.cn/Gowin_V${version}_Education_Linux.tar.gz";
-  };
 
-  nativeBuildInputs = [
-    wrapQtAppsHook
-  ];
+    # The download is rejected without a browser user agent.
+    curlOptsList = [
+      "-A"
+      "Mozilla/5.0"
+    ];
+  };
 
   sourceRoot = "./";
 
@@ -34,12 +31,17 @@ mkDerivation {
     runHook preInstall
 
     mkdir --parents --verbose $out/
-    cp --no-preserve=mode --recursive --verbose ./IDE/* $out/
-    rm --recursive --verbose $out/plugins/qt/
-    rm --verbose $out/lib/libstdc++.so.6
+    cp --preserve=mode --recursive --verbose ./IDE/* $out/
+
+    # These bundled libraries are incompatible with the versions provided by
+    # NixOS and must be removed and replaced by the wrapped environment.
+    rm --force --verbose \
+      $out/lib/libfreetype.so.6 \
+      $out/lib/libstdc++.so.6 \
+      $out/lib/libGLX.so.0 \
+      $out/lib/libGLdispatch.so.0
 
     chmod --verbose +x $out/bin/gw_ide
-    wrapQtApp $out/bin/gw_ide
 
     runHook postInstall
   '';
@@ -47,5 +49,13 @@ mkDerivation {
   dontStrip = true;
   dontPatchELF = true;
   dontPatchShebangs = true;
-  dontWrapQtApps = true;
+
+  meta = {
+    description = "An EDA suite for designing and developing Gowin FPGAs";
+    homepage = "https://www.gowinsemi.com/en/support/home/";
+    downloadPage = "https://www.gowinsemi.com/en/support/download_eda/";
+    license = lib.licenses.unfree;
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    platforms = [ "x86_64-linux" ];
+  };
 }

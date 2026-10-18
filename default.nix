@@ -2,9 +2,16 @@
   pkgs ? import <nixpkgs> { },
 }:
 let
-  inherit (pkgs) callPackage libsForQt5;
+  inherit (pkgs) callPackage;
+
+  gowin-eda-education-unwrapped = callPackage ./package-unwrapped.nix { };
+  gowin-eda-education = callPackage ./package.nix {
+    inherit gowin-eda-education-unwrapped;
+  };
 in
-rec {
-  gowin-eda-education = callPackage ./package.nix { inherit gowin-eda-education-unwrapped; };
-  gowin-eda-education-unwrapped = libsForQt5.callPackage ./package-unwrapped.nix { };
+{
+  inherit
+    gowin-eda-education-unwrapped
+    gowin-eda-education
+    ;
 }
