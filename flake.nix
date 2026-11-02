@@ -24,6 +24,11 @@
 
       overlays.default = final: _: import ./default.nix { pkgs = final; };
 
+      checks.${system} = import ./checks.nix {
+        inherit (pkgs) runCommand;
+        inherit (gowinPackages) gowin-eda-education;
+      };
+
       formatter.${system} = pkgs.nixfmt;
     };
 }
