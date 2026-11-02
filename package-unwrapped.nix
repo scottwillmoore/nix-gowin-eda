@@ -44,6 +44,22 @@ stdenv.mkDerivation {
       $out/lib/libGLX.so.0 \
       $out/lib/libGLdispatch.so.0
 
+    # The bundled X libraries are old and do not contain `libX11.so.6`, so the
+    # loader already falls back to nixpkgs for `libX11`. The other X libraries
+    # are removed so that only the nixpkgs X stack is used.
+    rm --force --verbose \
+      $out/lib/libX11.so \
+      $out/lib/libX11.so.6 \
+      $out/lib/libXau.so.6 \
+      $out/lib/libXext.so.6 \
+      $out/lib/libXrender.so.1 \
+      $out/lib/libxcb.so.1 \
+      $out/lib/libxcb-icccm.so.4 \
+      $out/lib/libxcb-image.so.0 \
+      $out/lib/libxcb-keysyms.so.1 \
+      $out/lib/libxcb-render-util.so.0 \
+      $out/lib/libxcb-xinerama.so.0
+
     chmod --verbose +x $out/bin/gw_ide
 
     # The binaries hard-code a path to the dynamic loader, which is unavailable

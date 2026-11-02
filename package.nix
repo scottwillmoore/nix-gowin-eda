@@ -10,7 +10,6 @@
   makeDesktopItem,
 
   alsa-lib,
-  bzip2,
   dbus,
   expat,
   fontconfig,
@@ -20,23 +19,19 @@
   libGL,
   libx11,
   libxcb,
-  libxcb-cursor,
-  libxcb-errors,
   libxcb-image,
   libxcb-keysyms,
   libxcb-render-util,
-  libxcb-util,
   libxcb-wm,
   libxcomposite,
-  libxcursor,
   libxdamage,
   libxext,
   libxfixes,
   libxkbcommon,
   libxrandr,
   libxrender,
+  libxcursor,
   libxtst,
-  mesa,
   nspr,
   nss,
   udev,
@@ -48,6 +43,40 @@ let
 
   pname = "gowin-eda-education";
   version = gowin-eda-education-unwrapped.version;
+
+  runtimeLibraries = [
+    # Link-time libraries
+    alsa-lib
+    dbus
+    expat
+    fontconfig
+    freetype
+    glib
+    krb5
+    libGL
+    libx11
+    libxcb
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxkbcommon
+    libxrandr
+    libxrender
+    libxtst
+    nspr
+    nss
+    zlib
+    stdenv.cc.cc.lib
+
+    # On-demand libraries
+    libxcursor
+    udev
+  ];
 
   executables = [
     "gw_ide"
@@ -65,41 +94,6 @@ let
     "gw_goeye"
   ];
 
-  runtimeLibraries = [
-    alsa-lib
-    bzip2
-    dbus
-    expat
-    fontconfig
-    freetype
-    glib
-    krb5
-    libGL
-    libx11
-    libxcb
-    libxcb-cursor
-    libxcb-errors
-    libxcb-image
-    libxcb-keysyms
-    libxcb-render-util
-    libxcb-util
-    libxcb-wm
-    libxcomposite
-    libxcursor
-    libxdamage
-    libxext
-    libxfixes
-    libxkbcommon
-    libxrandr
-    libxrender
-    libxtst
-    mesa
-    nspr
-    nss
-    udev
-    zlib
-    stdenv.cc.cc.lib
-  ];
 in
 stdenv.mkDerivation {
   inherit pname version;
