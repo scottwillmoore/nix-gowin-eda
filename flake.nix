@@ -22,6 +22,8 @@
         default = gowinPackages.gowin-eda-education;
       };
 
+      overlays.default = final: _: import ./default.nix { pkgs = final; };
+
       formatter.${system} = pkgs.nixfmt;
     };
 }
