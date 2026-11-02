@@ -10,8 +10,5 @@ let
   };
 in
 {
-  inherit
-    gowin-eda-education-unwrapped
-    gowin-eda-education
-    ;
+  inherit gowin-eda-education;
 }
