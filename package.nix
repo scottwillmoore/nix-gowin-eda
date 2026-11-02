@@ -39,6 +39,7 @@
   mesa,
   nspr,
   nss,
+  udev,
   zlib,
 }:
 
@@ -95,6 +96,7 @@ let
     mesa
     nspr
     nss
+    udev
     zlib
     stdenv.cc.cc.lib
   ];
