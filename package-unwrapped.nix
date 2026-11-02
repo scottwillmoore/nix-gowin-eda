@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  patchelf,
 
   version ? "1.9.11.03",
   hash ? "sha256-b9OS90c7JNhHtvjr3HoYXFkYJro12NDlF5YQMNRG+fc=",
@@ -23,6 +24,8 @@ stdenv.mkDerivation {
 
   sourceRoot = "./";
 
+  nativeBuildInputs = [ patchelf ];
+
   dontPatch = true;
   dontConfigure = true;
   dontBuild = true;
@@ -42,6 +45,14 @@ stdenv.mkDerivation {
       $out/lib/libGLdispatch.so.0
 
     chmod --verbose +x $out/bin/gw_ide
+
+    # The binaries hard-code a path to the dynamic loader, which is unavailable
+    # on NixOS and must be rewritten to the nixpkgs loader.
+    find "$out" -type f -executable -print0 | while IFS= read -r -d "" file; do
+      if patchelf --print-interpreter "$file" >/dev/null 2>&1; then
+        patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" "$file"
+      fi
+    done
 
     runHook postInstall
   '';
