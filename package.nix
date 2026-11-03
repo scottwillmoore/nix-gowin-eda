@@ -4,7 +4,7 @@
 
   gowin-eda-education-unwrapped,
 
-  makeWrapper,
+  makeBinaryWrapper,
 
   copyDesktopItems,
   makeDesktopItem,
@@ -99,7 +99,7 @@ stdenv.mkDerivation {
   inherit pname version;
 
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     copyDesktopItems
   ];
 
@@ -112,7 +112,7 @@ stdenv.mkDerivation {
 
     for executable in ${lib.escapeShellArgs executables}; do
       if [ -e "${gowin-eda-education-unwrapped}/bin/$executable" ]; then
-        makeWrapper "${gowin-eda-education-unwrapped}/bin/$executable" "$out/bin/$executable" \
+        makeBinaryWrapper "${gowin-eda-education-unwrapped}/bin/$executable" "$out/bin/$executable" \
           --prefix LD_LIBRARY_PATH : "${gowin-eda-education-unwrapped}/lib:${makeLibraryPath runtimeLibraries}" \
           --set-default QT_QPA_PLATFORM xcb
       fi
