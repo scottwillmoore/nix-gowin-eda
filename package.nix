@@ -135,7 +135,7 @@ stdenv.mkDerivation {
       name = pname;
       desktopName = "Gowin EDA IDE Education";
       comment = gowin-eda-education-unwrapped.meta.description;
-      exec = "gw_ide %U";
+      exec = "gw_ide -prj %f";
       icon = "gowin-eda";
       categories = [
         "Development"
